@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinCAT-ADS-DotNet-Samples", "TwinCAT-ADS-DotNet-Samples\TwinCAT-ADS-DotNet-Samples.csproj", "{74B2BDEE-EFC5-4108-812D-0DFE2BAB369E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74B2BDEE-EFC5-4108-812D-0DFE2BAB369E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74B2BDEE-EFC5-4108-812D-0DFE2BAB369E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74B2BDEE-EFC5-4108-812D-0DFE2BAB369E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74B2BDEE-EFC5-4108-812D-0DFE2BAB369E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C453455-39E6-4D6C-AA01-18EC0C461342}
+	EndGlobalSection
+EndGlobal
