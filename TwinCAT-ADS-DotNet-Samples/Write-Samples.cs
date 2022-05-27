@@ -13,7 +13,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Write_Samples
     {
-        void SumWritePrimativeTypes(AmsAddress address, SessionSettings settings)
+        public void SumWritePrimativeTypes(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
@@ -38,7 +38,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             }
 
         }
-        void SumWriteArrayOfStruct(AmsAddress address, SessionSettings settings)
+        public void SumWriteArrayOfStruct(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {

@@ -10,16 +10,17 @@ namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Connection_Samples
     {
-        void ConnectionUsingAdsSession(AmsAddress address,SessionSettings settings)
+        public void ConnectionUsingAdsSession(AmsAddress address,SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
                 AdsConnection connection = (AdsConnection)session.Connect(); // Establish the connection
                 
                 ConnectionState connectionState = connection.ConnectionState; // The actual connection state
+
             }
         }
-        void ConnectionUsingAdsClient(AmsAddress address)
+        public void ConnectionUsingAdsClient(AmsAddress address)
         {
             using (AdsClient client = new AdsClient())
             {
