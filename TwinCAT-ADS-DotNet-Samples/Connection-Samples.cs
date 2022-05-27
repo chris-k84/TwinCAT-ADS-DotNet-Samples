@@ -17,7 +17,6 @@ namespace TwinCAT_ADS_DotNet_Samples
                 AdsConnection connection = (AdsConnection)session.Connect(); // Establish the connection
                 
                 ConnectionState connectionState = connection.ConnectionState; // The actual connection state
-
             }
         }
         public void ConnectionUsingAdsClient(AmsAddress address)
