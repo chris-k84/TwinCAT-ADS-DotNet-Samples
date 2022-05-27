@@ -130,5 +130,24 @@ namespace TwinCAT_ADS_DotNet_Samples
             }
             
         }
+        void ReadArrayofStructs(AmsAddress address, SessionSettings settings)
+        {
+            using (AdsSession session = new AdsSession(address, settings))
+            {
+                AdsConnection connection = (AdsConnection)session.Connect();
+
+                SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
+                ISymbolLoader loader = SymbolLoaderFactory.Create(connection, loaderSettings);
+
+                ArrayInstance var1 = (ArrayInstance)loader.Symbols["MAIN.arrTest"];
+                Symbol var2 = (Symbol)loader.Symbols["MAIN.iCounter"];
+
+                SymbolCollection sumSymbols = new SymbolCollection() { var1, var2 };
+
+                SumSymbolRead readCommand = new SumSymbolRead(connection, sumSymbols);
+
+                var sumReadResult = readCommand.Read();
+            }
+        }
     }
 }
