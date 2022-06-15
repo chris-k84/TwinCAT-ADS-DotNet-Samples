@@ -5,29 +5,68 @@ using System.Text;
 using System.Threading.Tasks;
 using TwinCAT;
 using TwinCAT.Ads;
+using TwinCAT.Ads.TypeSystem;
+using TwinCAT.TypeSystem;
 
 namespace TwinCAT_ADS_DotNet_Samples
 {
-    internal class Connection_Samples
+    internal class Connection_Samples : IDisposable
     {
-        public void ConnectionUsingAdsSession(AmsAddress address,SessionSettings settings)
-        {
-            using (AdsSession session = new AdsSession(address, settings))
-            {
-                AdsConnection connection = (AdsConnection)session.Connect(); // Establish the connection
-                
-                ConnectionState connectionState = connection.ConnectionState; // The actual connection state
-            }
+        AdsSession session { get; set; }
+        AdsClient client { get; set; }
+        AdsConnection connection { get; set; }
+        public ConnectionState connectionState { get; set; }
+        SessionSettings settings = SessionSettings.Default;
+        AmsAddress address;
+        public StateInfo info { get; set; }
+        public DeviceInfo deviceInfo {get;set;}
+        public ISymbolLoader loader;
+        public void ConnectionUsingAdsSession(string netid, int port)
+        {        
+            address = new AmsAddress(netid, port);
+
+            session = new AdsSession(address,settings);
+                 
+            connection = (AdsConnection)session.Connect(); // Establish the connection 
         }
-        public void ConnectionUsingAdsClient(AmsAddress address)
+        public void ConnectionUsingAdsClient(string netid, int port)
         {
-            using (AdsClient client = new AdsClient())
-            {
                 client.Connect(address);
 
-                StateInfo info = new StateInfo();
+                info = new StateInfo();
 
-                info = client.ReadState();
+                //info = client.ReadState();
+        }
+        public void ConnectToIOServer(AmsAddress address)
+        {
+            connection = (AdsConnection)session.Connect();
+        }
+        public void CheckConnection()
+        {
+            if(connection != null)
+            {
+                info = connection.ReadState();
+                deviceInfo = connection.ReadDeviceInfo();
+                connectionState = connection.ConnectionState; // The actual connection state
+            }
+        }
+        public void LoadSymbolsFromTarget()
+
+        {
+            SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
+            loader = SymbolLoaderFactory.Create(connection, loaderSettings);
+        }
+
+        public void Dispose()
+        {
+            if(session != null)
+            {
+                session.Dispose();
+                connection.Dispose();
+            }
+            if(client != null)
+            {
+                client.Dispose();
             }
         }
     }

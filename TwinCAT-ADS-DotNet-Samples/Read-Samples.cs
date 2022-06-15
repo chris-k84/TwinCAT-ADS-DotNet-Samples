@@ -14,7 +14,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Read_Samples
     {
-        public void ReadWithIdxOfs(AmsAddress address, SessionSettings settings)
+        void ReadWithIdxOfs(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
@@ -27,7 +27,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 int i = BitConverter.ToInt32(readBuffer, 0);
             }
         }
-        public void ReadPrimativeWithSymbolicAccess(AmsAddress address, SessionSettings settings)
+        void ReadPrimativeWithSymbolicAccess(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
@@ -56,7 +56,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 Symbol symbol = (Symbol)loader.Symbols[uintValue];
 
-                symbol.NotificationSettings = new NotificationSettings(AdsTransMode.OnChange, 500, 0);
+                symbol.NotificationSettings = new NotificationSettings(AdsTransMode.OnChange, 1, 0);
                 symbol.ValueChanged += On_SymbolChange;
             }
         }
@@ -66,7 +66,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             Console.WriteLine("The Var " + e.Symbol + " has value " + e.Value);
             Console.WriteLine(sender.ToString());
         }
-        public void ReadArrayWithSymbolicAccess(AmsAddress address, SessionSettings settings)
+        void ReadArrayWithSymbolicAccess(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
@@ -82,7 +82,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 short[] readBuffer = (short[])arrayRead.ReadValue();
             }
         }
-        public void SumReadPrimativeTypes(AmsAddress address, SessionSettings settings)
+        void SumReadPrimativeTypes(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
@@ -105,7 +105,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 var resultSumRead = readCommand.Read();
             }
         }
-        public void FilterSymbols(AmsAddress address, SessionSettings settings)
+        void FilterSymbols(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
@@ -128,7 +128,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             }
             
         }
-        public void ReadArrayofStructs(AmsAddress address, SessionSettings settings)
+        void ReadArrayofStructs(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {
