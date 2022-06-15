@@ -12,7 +12,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Method_Call_Samples
     {
-        public void CallMethodInPLC(AmsAddress address, SessionSettings settings)
+        void CallMethodInPLC(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
             {

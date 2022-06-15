@@ -43,28 +43,24 @@ namespace TwinCAT_ADS_DotNet_Samples
                 Test.ReadValue();
             }
         }
-        public void ReadPrimativeWithEvent(AmsAddress address, SessionSettings settings)
+        public void CreateEventOnPrimativeType(ISymbolLoader loader, string symbol)
         {
-            using (AdsSession session = new AdsSession(address, settings))
-            {
-                string uintValue = "MAIN.uintValue";
+            Symbol adsSymbol = (Symbol)loader.Symbols[symbol];
 
-                AdsConnection connection = (AdsConnection)session.Connect();
-
-                SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
-                ISymbolLoader loader = SymbolLoaderFactory.Create(connection, loaderSettings);
-
-                Symbol symbol = (Symbol)loader.Symbols[uintValue];
-
-                symbol.NotificationSettings = new NotificationSettings(AdsTransMode.OnChange, 1, 0);
-                symbol.ValueChanged += On_SymbolChange;
-            }
+            adsSymbol.NotificationSettings = new NotificationSettings(AdsTransMode.OnChange, 1, 0);
+            adsSymbol.ValueChanged += On_SymbolChange;
+            
         }
         static private void On_SymbolChange(object sender, ValueChangedEventArgs e)
         {
             Symbol symbol = (Symbol)e.Symbol;
             Console.WriteLine("The Var " + e.Symbol + " has value " + e.Value);
             Console.WriteLine(sender.ToString());
+        }
+        public void RemoveEventOnPrimative(ISymbolLoader loader, string symbol)
+        {
+            Symbol adsSymbol = (Symbol)loader.Symbols[symbol];
+            adsSymbol.ValueChanged -= On_SymbolChange;
         }
         void ReadArrayWithSymbolicAccess(AmsAddress address, SessionSettings settings)
         {
