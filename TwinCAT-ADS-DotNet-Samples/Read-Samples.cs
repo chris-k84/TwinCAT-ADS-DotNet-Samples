@@ -14,18 +14,11 @@ namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Read_Samples
     {
-        void ReadWithIdxOfs(AmsAddress address, SessionSettings settings)
+        public void ReadWithIdxOfs(string Index, String Offset, IAdsConnection connection,byte[] ReadBuffer)
         {
-            using (AdsSession session = new AdsSession(address, settings))
-            {
-                AdsConnection connection = (AdsConnection)session.Connect();
-
-                uint Index = 0;
-                uint Offset = 0;
-                byte[] readBuffer = new byte[8];
-                connection.Read(Index, Offset, readBuffer);
-                int i = BitConverter.ToInt32(readBuffer, 0);
-            }
+                uint Oft = Convert.ToUInt32(Index,16);
+                uint Idx = Convert.ToUInt32(Offset,16);
+                connection.Read(Idx, Oft, ReadBuffer);
         }
         void ReadPrimativeWithSymbolicAccess(AmsAddress address, SessionSettings settings)
         {

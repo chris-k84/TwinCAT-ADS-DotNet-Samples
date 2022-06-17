@@ -15,6 +15,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         AdsSession session { get; set; }
         AdsClient client { get; set; }
         AdsConnection connection { get; set; }
+        public IAdsConnection adsConnection {get; set;}
         public ConnectionState connectionState { get; set; }
         SessionSettings settings = SessionSettings.Default;
         AmsAddress address;
@@ -28,14 +29,17 @@ namespace TwinCAT_ADS_DotNet_Samples
             session = new AdsSession(address,settings);
                  
             connection = (AdsConnection)session.Connect(); // Establish the connection 
+
+            adsConnection = connection;
         }
         public void ConnectionUsingAdsClient(string netid, int port)
         {
+                client = new AdsClient();
+                address = new AmsAddress(netid, port);
+
                 client.Connect(address);
 
-                info = new StateInfo();
-
-                //info = client.ReadState();
+                adsConnection = connection;
         }
         public void ConnectToIOServer(AmsAddress address)
         {
