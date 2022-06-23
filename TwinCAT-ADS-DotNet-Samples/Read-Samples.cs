@@ -20,21 +20,12 @@ namespace TwinCAT_ADS_DotNet_Samples
                 uint Oft = Convert.ToUInt32(Offset,16);
                 connection.Read(Idx, Oft, ReadBuffer);
         }
-        void ReadPrimativeWithSymbolicAccess(AmsAddress address, SessionSettings settings)
+        public void ReadPrimativeWithSymbolicAccess(ISymbolLoader loader, string symbol)
         {
-            using (AdsSession session = new AdsSession(address, settings))
-            {
-                string uintValue = "MAIN.uintValue";
+            Symbol Test = (Symbol)loader.Symbols[symbol];
 
-                AdsConnection connection = (AdsConnection)session.Connect();
-
-                SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
-                ISymbolLoader loader = SymbolLoaderFactory.Create(connection, loaderSettings);
-
-                Symbol Test = (Symbol)loader.Symbols[uintValue];
-
-                Test.ReadValue();
-            }
+            Test.ReadValue();
+            
         }
         public void CreateEventOnPrimativeType(ISymbolLoader loader, string symbol)
         {
