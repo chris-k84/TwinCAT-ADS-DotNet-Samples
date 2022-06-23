@@ -25,7 +25,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 Console.ReadLine();
                 // byte[] readBuffer = new byte[8];
-                // reader.ReadWithIdxOfs("10180001","F302", adsconnection.adsConnection,readBuffer);
+                // reader.ReadWithIdxOfs("F302","10180001", adsconnection.adsConnection,readBuffer);
 
                 Console.ReadLine();
             }

@@ -16,8 +16,8 @@ namespace TwinCAT_ADS_DotNet_Samples
     {
         public void ReadWithIdxOfs(string Index, String Offset, IAdsConnection connection,byte[] ReadBuffer)
         {
-                uint Oft = Convert.ToUInt32(Index,16);
-                uint Idx = Convert.ToUInt32(Offset,16);
+                uint Idx = Convert.ToUInt32(Index,16);
+                uint Oft = Convert.ToUInt32(Offset,16);
                 connection.Read(Idx, Oft, ReadBuffer);
         }
         void ReadPrimativeWithSymbolicAccess(AmsAddress address, SessionSettings settings)
