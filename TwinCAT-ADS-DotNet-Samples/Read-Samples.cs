@@ -97,28 +97,21 @@ namespace TwinCAT_ADS_DotNet_Samples
                 var resultSumRead = readCommand.Read();
             }
         }
-        void FilterSymbols(AmsAddress address, SessionSettings settings)
+        public List<string> FilterSymbols(ISymbolLoader loader, string path)
         {
-            using (AdsSession session = new AdsSession(address, settings))
-            {
-                AdsConnection connection = (AdsConnection)session.Connect();
-
-                SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
-                ISymbolLoader loader = SymbolLoaderFactory.Create(connection, loaderSettings);
-
                 Regex filterExpression = new Regex(pattern: @"^MAIN.*"); // Everything that starts with "MAIN"
 
                 Func<ISymbol, bool> filter = s => filterExpression.IsMatch(s.InstancePath);
 
                 SymbolIterator iterator = new SymbolIterator(loader.Symbols, true, filter);
+
+                List<string> symbolList = new List<string>();
                 
                 foreach (ISymbol filteredSymbol in iterator)
                 {
-                    Console.WriteLine(filteredSymbol.InstancePath);
+                    symbolList.Add(filteredSymbol.InstancePath);
                 }
-
-            }
-            
+                return symbolList;
         }
         void ReadArrayofStructs(AmsAddress address, SessionSettings settings)
         {
