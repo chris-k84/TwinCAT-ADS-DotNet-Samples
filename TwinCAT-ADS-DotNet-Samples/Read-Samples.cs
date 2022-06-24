@@ -20,12 +20,24 @@ namespace TwinCAT_ADS_DotNet_Samples
                 uint Oft = Convert.ToUInt32(Offset,16);
                 connection.Read(Idx, Oft, ReadBuffer);
         }
-        public void ReadPrimativeWithSymbolicAccess(ISymbolLoader loader, string symbol)
+        public string ReadPrimativeWithSymbolicAccess(ISymbolLoader loader, string symbol)
         {
             Symbol Test = (Symbol)loader.Symbols[symbol];
-
-            Test.ReadValue();
             
+            return Test.ReadValue().ToString();
+            
+        }
+        public byte[] ReadComplexWithSymbolicAccess(ISymbolLoader loader, string symbol)
+        {
+            Symbol Test = (Symbol)loader.Symbols[symbol];
+            
+            return (byte[])Test.ReadValue();
+        }
+        public object ReadComplexWithDynamicSymbolAccess(ISymbolLoader loader, string symbol)
+        {
+            DynamicSymbol Test = (DynamicSymbol)loader.Symbols[symbol];
+
+            return Test.ReadValue();
         }
         public void CreateEventOnPrimativeType(ISymbolLoader loader, string symbol)
         {

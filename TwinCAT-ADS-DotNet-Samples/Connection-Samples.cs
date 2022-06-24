@@ -54,10 +54,10 @@ namespace TwinCAT_ADS_DotNet_Samples
                 connectionState = connection.ConnectionState; // The actual connection state
             }
         }
-        public void LoadSymbolsFromTarget()
-
+        public void LoadSymbolsFromTarget(int SymbolMode)
         {
-            SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
+            SymbolsLoadMode loadMode = (SymbolsLoadMode)SymbolMode;
+            SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(loadMode);
             loader = SymbolLoaderFactory.Create(connection, loaderSettings);
         }
 
