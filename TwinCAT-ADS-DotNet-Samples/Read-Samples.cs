@@ -99,14 +99,14 @@ namespace TwinCAT_ADS_DotNet_Samples
         }
         public List<string> FilterSymbols(ISymbolLoader loader, string path)
         {
-                Regex filterExpression = new Regex(pattern: @"^MAIN.*"); // Everything that starts with "MAIN"
+                Regex filterExpression = new Regex(pattern: @"^"+path+".*"); // Everything that starts with "MAIN"
 
                 Func<ISymbol, bool> filter = s => filterExpression.IsMatch(s.InstancePath);
 
                 SymbolIterator iterator = new SymbolIterator(loader.Symbols, true, filter);
 
                 List<string> symbolList = new List<string>();
-                
+
                 foreach (ISymbol filteredSymbol in iterator)
                 {
                     symbolList.Add(filteredSymbol.InstancePath);
