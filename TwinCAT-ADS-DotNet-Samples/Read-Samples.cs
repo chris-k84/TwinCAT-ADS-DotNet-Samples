@@ -58,44 +58,25 @@ namespace TwinCAT_ADS_DotNet_Samples
             Symbol adsSymbol = (Symbol)loader.Symbols[symbol];
             adsSymbol.ValueChanged -= On_SymbolChange;
         }
-        void ReadArrayWithSymbolicAccess(AmsAddress address, SessionSettings settings)
+        public short[] ReadArrayWithSymbolicAccess(ISymbolLoader loader, string symbol)
         {
-            using (AdsSession session = new AdsSession(address, settings))
-            {
-                string arrayTest = "MAIN.arrayTest";
+                Symbol arrayRead = (Symbol)loader.Symbols[symbol];
 
-                AdsConnection connection = (AdsConnection)session.Connect();
-
-                SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
-                ISymbolLoader loader = SymbolLoaderFactory.Create(connection, loaderSettings);
-
-                Symbol arrayRead = (Symbol)loader.Symbols[arrayTest];
-
-                short[] readBuffer = (short[])arrayRead.ReadValue();
-            }
+                return (short[])arrayRead.ReadValue();
         }
-        void SumReadPrimativeTypes(AmsAddress address, SessionSettings settings)
+        public object[] SumReadPrimativeTypes(ISymbolLoader loader, IAdsConnection adsConnection, string[] symbols)
         {
-            using (AdsSession session = new AdsSession(address, settings))
+            SymbolCollection symbolCollection = new SymbolCollection();
+
+            foreach(String s in symbols)
             {
-                string uintValue = "MAIN.uintValue";
-                string dintValue = "MAIN.dintValue";
-
-                AdsConnection connection = (AdsConnection)session.Connect();
-
-                SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
-                ISymbolLoader loader = SymbolLoaderFactory.Create(connection, loaderSettings);
-
-                Symbol var1 = (Symbol)loader.Symbols[uintValue];
-                Symbol var2 = (Symbol)loader.Symbols[dintValue];
-
-                SymbolCollection symbols = new SymbolCollection() { var1, var2 };
-
-                SumSymbolRead readCommand = new SumSymbolRead(connection, symbols);
-
-
-                var resultSumRead = readCommand.Read();
+                Symbol symbol = (Symbol)loader.Symbols[s];
+                symbolCollection.Add(symbol);
             }
+                
+            SumSymbolRead readCommand = new SumSymbolRead(adsConnection, symbolCollection);
+
+            return readCommand.Read();
         }
         public List<string> FilterSymbols(ISymbolLoader loader, string path)
         {
