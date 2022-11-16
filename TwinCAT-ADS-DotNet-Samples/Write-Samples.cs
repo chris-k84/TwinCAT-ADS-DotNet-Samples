@@ -19,30 +19,24 @@ namespace TwinCAT_ADS_DotNet_Samples
             
             Test.WriteValue(value);
         }
-        void SumWritePrimativeTypes(AmsAddress address, SessionSettings settings)
+        void SumWritePrimativeTypes(ISymbolLoader loader,IAdsConnection adsConnection, List<string> symbols, List<int> values)
         {
-            using (AdsSession session = new AdsSession(address, settings))
+            SymbolCollection writeSymbols = new SymbolCollection();
+            for(var i = 0; i < symbols.Count; i++)
             {
-                string uintValue = "MAIN.uintValue";
-                string dintValue = "MAIN.dintValue";
-
-                AdsConnection connection = (AdsConnection)session.Connect();
-
-                SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(SymbolsLoadMode.Flat);
-                ISymbolLoader loader = SymbolLoaderFactory.Create(connection, loaderSettings);
-
-                Symbol var1 = (Symbol)loader.Symbols[uintValue];
-                Symbol var2 = (Symbol)loader.Symbols[dintValue];
-
-                SymbolCollection symbols = new SymbolCollection() { var1, var2 };
-
-                SumSymbolWrite writeCommand = new SumSymbolWrite(connection, symbols);
-
-                object[] writeValues = new object[] { (ushort)42, (int)32 };
-
-                writeCommand.Write(writeValues);
+                writeSymbols.Add((Symbol)loader.Symbols[symbols[i]]);
             }
 
+            SumSymbolWrite writeCommand = new SumSymbolWrite(adsConnection,writeSymbols);
+
+            object[] writeValues = new object[]{};
+            
+            for(var i = 0; i < values.Count; i++)
+            {
+                writeValues[i] = values[i];
+            }
+
+            writeCommand.Write(writeValues);
         }
         void SumWriteArrayOfStruct(AmsAddress address, SessionSettings settings)
         {

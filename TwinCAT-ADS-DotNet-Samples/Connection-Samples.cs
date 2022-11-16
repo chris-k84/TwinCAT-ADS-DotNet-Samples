@@ -27,7 +27,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             address = new AmsAddress(netid, port);
 
             session = new AdsSession(address,settings);
-                 
+                
             connection = (AdsConnection)session.Connect(); // Establish the connection 
 
             adsConnection = connection;
