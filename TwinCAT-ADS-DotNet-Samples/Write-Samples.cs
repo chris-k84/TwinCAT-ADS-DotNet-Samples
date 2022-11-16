@@ -11,8 +11,14 @@ using TwinCAT.TypeSystem;
 
 namespace TwinCAT_ADS_DotNet_Samples
 {
-    internal class Write_Samples
+    internal class Write_Samples : IDisposable
     {
+        public void WriteIntWithSymbolicAccess(ISymbolLoader loader, string symbol, int value)
+        {
+            Symbol Test = (Symbol)loader.Symbols[symbol];
+            
+            Test.WriteValue(value);
+        }
         void SumWritePrimativeTypes(AmsAddress address, SessionSettings settings)
         {
             using (AdsSession session = new AdsSession(address, settings))
@@ -69,6 +75,11 @@ namespace TwinCAT_ADS_DotNet_Samples
                 }
             }
 
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
     struct TestStruct
