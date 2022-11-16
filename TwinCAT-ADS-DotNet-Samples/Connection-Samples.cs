@@ -60,7 +60,6 @@ namespace TwinCAT_ADS_DotNet_Samples
             SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(loadMode);
             loader = SymbolLoaderFactory.Create(connection, loaderSettings);
         }
-
         public void Dispose()
         {
             if(session != null)
