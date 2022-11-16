@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.32510.428
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwinCAT-ADS-DotNet-Samples", "TwinCAT-ADS-DotNet-Samples\TwinCAT-ADS-DotNet-Samples.csproj", "{74B2BDEE-EFC5-4108-812D-0DFE2BAB369E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAdsSample", "WpfAdsSample\WpfAdsSample.csproj", "{1A8A3EDC-B318-4B5C-840A-DDF5E39E22BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfAdsSample", "WpfAdsSample\WpfAdsSample.csproj", "{1A8A3EDC-B318-4B5C-840A-DDF5E39E22BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
