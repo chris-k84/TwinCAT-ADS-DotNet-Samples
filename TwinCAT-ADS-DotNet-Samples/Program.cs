@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TwinCAT.Ads.TypeSystem;
+using TwinCAT.TypeSystem;
 
 namespace TwinCAT_ADS_DotNet_Samples
 {
@@ -10,30 +11,31 @@ namespace TwinCAT_ADS_DotNet_Samples
         {  
             Console.WriteLine("Hello World");
             Read_Samples reader = new Read_Samples();
+            
             List<string> symbols = new List<string>();
             using(Connection_Samples adsconnection = new Connection_Samples())
             {
-                adsconnection.ConnectionUsingAdsSession("10.0.2.15.1.1", 350);
+                adsconnection.ConnectionUsingAdsSession("10.0.2.15.1.1", 851);
                 //adsconnection.ConnectionUsingAdsSession("169.254.127.143.2.1", 1001);
 
                 //adsconnection.CheckConnection();
 
-                adsconnection.LoadSymbolsFromTarget(0);
+                // adsconnection.LoadSymbolsFromTarget(0);
 
-                symbols = reader.FilterSymbols(adsconnection.loader, "Untitled3_Obj1 (Module1)");
+                // symbols = reader.FilterSymbols(adsconnection.loader, "Untitled3_Obj1 (Module1)");
 
-                foreach (Symbol s in adsconnection.loader.Symbols)
-                {
-                    Console.WriteLine(s.InstancePath);
-                }
+                // foreach (Symbol s in adsconnection.loader.Symbols)
+                // {
+                //     Console.WriteLine(s.InstancePath);
+                // }
 
                 //Console.WriteLine(reader.ReadPrimativeWithSymbolicAccess(adsconnection.loader, "MAIN.iInt"));
 
                 // byte[] val1 = reader.ReadComplexWithSymbolicAccess(adsconnection.loader, "MAIN.testStruct");
 
                 //object value = reader.ReadComplexWithDynamicSymbolAccess(adsconnection.loader, "MAIN.testStruct");
-
-                // reader.CreateEventOnPrimativeType(adsconnection.loader,"MAIN.iInt");
+                
+                reader.CreateEventOnPrimativeType(  adsconnection.loader, "MAIN.iInt", OnChange);
 
                 // Console.ReadLine();
 
@@ -45,5 +47,14 @@ namespace TwinCAT_ADS_DotNet_Samples
                 Console.ReadLine();
             }
         }
+
+        static public void OnChange(object sender, ValueChangedEventArgs e)
+        {
+            Symbol symbol = (Symbol)e.Symbol;
+            Console.WriteLine("The Var " + e.Symbol + " has value " + e.Value);
+            Console.WriteLine(sender.ToString());
+        }
+        
+        
     }
 }

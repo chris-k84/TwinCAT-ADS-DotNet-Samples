@@ -12,7 +12,7 @@ using TwinCAT.TypeSystem;
 
 namespace TwinCAT_ADS_DotNet_Samples
 {
-    internal class Read_Samples
+    internal class Read_Samples : IDisposable
     {
         public void ReadWithIdxOfs(string Index, String Offset, IAdsConnection connection,byte[] ReadBuffer)
         {
@@ -45,9 +45,15 @@ namespace TwinCAT_ADS_DotNet_Samples
 
             adsSymbol.NotificationSettings = new NotificationSettings(AdsTransMode.OnChange, 1, 0);
             adsSymbol.ValueChanged += On_SymbolChange;
-            
         }
-        static private void On_SymbolChange(object sender, ValueChangedEventArgs e)
+        public void CreateEventOnPrimativeType(ISymbolLoader loader, string symbol, EventHandler<ValueChangedEventArgs> method)
+        {
+            Symbol adsSymbol = (Symbol)loader.Symbols[symbol];
+            
+            adsSymbol.NotificationSettings = new NotificationSettings(AdsTransMode.OnChange, 1, 0);
+            adsSymbol.ValueChanged += method;
+        }
+        private void On_SymbolChange(object sender, ValueChangedEventArgs e)
         {
             Symbol symbol = (Symbol)e.Symbol;
             Console.WriteLine("The Var " + e.Symbol + " has value " + e.Value);
@@ -112,6 +118,11 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 var sumReadResult = readCommand.Read();
             }
+        }
+        
+        public void Dispose()
+        {
+           
         }
     }
 }
