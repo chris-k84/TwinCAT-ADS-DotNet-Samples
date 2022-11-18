@@ -11,15 +11,30 @@ namespace TwinCAT_ADS_DotNet_Samples
         {  
             Console.WriteLine("Hello World");
             Read_Samples reader = new Read_Samples();
-            
+            Method_Call_Samples methods = new Method_Call_Samples();
             List<string> symbols = new List<string>();
             using(Connection_Samples adsconnection = new Connection_Samples())
             {
-                adsconnection.ConnectionUsingAdsSession("10.0.2.15.1.1", 851);
+                adsconnection.ConnectionUsingAdsSession("172.18.138.71.1.1", 851);
                 //adsconnection.ConnectionUsingAdsSession("169.254.127.143.2.1", 1001);
 
-                //adsconnection.CheckConnection();
+                adsconnection.CheckConnection();
 
+                Console.WriteLine(adsconnection.info.ToString());
+                Console.WriteLine(adsconnection.deviceInfo.ToString());
+                Console.WriteLine(adsconnection.connectionState);
+
+                adsconnection.LoadSymbolsFromTarget(2);
+
+                Console.ReadLine();
+
+                methods.DisplayRpcMethods(adsconnection.loader,"MAIN.fbMachine");
+
+                Console.ReadLine();
+
+                // methods.CallMethodInPLC(adsconnection.adsConnection, "MAIN.fbMachine","SetPackML",new object[]
+                //                                                 { (short)1 });
+                methods.CallMethodInPLC(adsconnection.adsConnection);
                 // adsconnection.LoadSymbolsFromTarget(0);
 
                 // symbols = reader.FilterSymbols(adsconnection.loader, "Untitled3_Obj1 (Module1)");
@@ -35,7 +50,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 //object value = reader.ReadComplexWithDynamicSymbolAccess(adsconnection.loader, "MAIN.testStruct");
                 
-                reader.CreateEventOnPrimativeType(  adsconnection.loader, "MAIN.iInt", OnChange);
+                //reader.CreateEventOnPrimativeType(  adsconnection.loader, "MAIN.iInt", OnChange);
 
                 // Console.ReadLine();
 
