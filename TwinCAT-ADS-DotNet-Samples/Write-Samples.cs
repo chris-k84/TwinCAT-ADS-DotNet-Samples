@@ -19,24 +19,17 @@ namespace TwinCAT_ADS_DotNet_Samples
             
             Test.WriteValue(value);
         }
-        void SumWritePrimativeTypes(ISymbolLoader loader,IAdsConnection adsConnection, List<string> symbols, List<int> values)
+        public void SumWritePrimativeTypes(ISymbolLoader loader,IAdsConnection adsConnection, string[] symbols, object[] values)
         {
             SymbolCollection writeSymbols = new SymbolCollection();
-            for(var i = 0; i < symbols.Count; i++)
+            foreach(string s in symbols)
             {
-                writeSymbols.Add((Symbol)loader.Symbols[symbols[i]]);
+                writeSymbols.Add((Symbol)loader.Symbols[s]);
             }
 
             SumSymbolWrite writeCommand = new SumSymbolWrite(adsConnection,writeSymbols);
 
-            object[] writeValues = new object[]{};
-            
-            for(var i = 0; i < values.Count; i++)
-            {
-                writeValues[i] = values[i];
-            }
-
-            writeCommand.Write(writeValues);
+            writeCommand.Write(values);
         }
         void SumWriteArrayOfStruct(AmsAddress address, SessionSettings settings)
         {

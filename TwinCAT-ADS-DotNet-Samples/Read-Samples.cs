@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using TwinCAT;
 using TwinCAT.Ads;
@@ -64,11 +66,11 @@ namespace TwinCAT_ADS_DotNet_Samples
             Symbol adsSymbol = (Symbol)loader.Symbols[symbol];
             adsSymbol.ValueChanged -= On_SymbolChange;
         }
-        public short[] ReadArrayWithSymbolicAccess(ISymbolLoader loader, string symbol)
+        public double[] ReadArrayWithSymbolicAccess(ISymbolLoader loader, string symbol)
         {
                 Symbol arrayRead = (Symbol)loader.Symbols[symbol];
 
-                return (short[])arrayRead.ReadValue();
+                return (double[])arrayRead.ReadValue();
         }
         public object[] SumReadPrimativeTypes(ISymbolLoader loader, IAdsConnection adsConnection, string[] symbols)
         {
@@ -79,10 +81,20 @@ namespace TwinCAT_ADS_DotNet_Samples
                 Symbol symbol = (Symbol)loader.Symbols[s];
                 symbolCollection.Add(symbol);
             }
-                
             SumSymbolRead readCommand = new SumSymbolRead(adsConnection, symbolCollection);
+            
 
             return readCommand.Read();
+        }
+        public object[] SumReadPrimativesByHandle(IAdsConnection adsConnection, string[] symbols)
+        {
+            SumCreateHandles createHandlesCommand = new SumCreateHandles(adsConnection, symbols);
+
+            uint[] resultCreateHandles = createHandlesCommand.CreateHandles();
+            Type[] valueTypes = new Type[] { typeof(bool), typeof(bool), typeof(bool),typeof(bool) };
+            SumHandleRead readCommand = new SumHandleRead(adsConnection, resultCreateHandles, valueTypes);
+            return readCommand.Read();
+            
         }
         public List<string> FilterSymbols(ISymbolLoader loader, string path)
         {
@@ -119,7 +131,6 @@ namespace TwinCAT_ADS_DotNet_Samples
                 var sumReadResult = readCommand.Read();
             }
         }
-        
         public void Dispose()
         {
            

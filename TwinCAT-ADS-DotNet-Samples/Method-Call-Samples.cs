@@ -33,7 +33,6 @@ namespace TwinCAT_ADS_DotNet_Samples
                                                                 methodName,methodParameters);
             
         }
-
         public void DisplayRpcMethods(ISymbolLoader loader, string target)
         {
             IStructInstance main = (IStructInstance)loader.Symbols[target];
