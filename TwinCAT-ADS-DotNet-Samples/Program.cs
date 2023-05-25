@@ -90,6 +90,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 
 
                 //////////////////////////Event reading - set up Event handler on symbol/////////////////////////////
+                //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
                 //adsconnection.LoadSymbolsFromTarget(1);
                 //reader.CreateEventOnPrimativeType(adsconnection.loader, "MAIN.realData", OnChangeArray);
                 //Console.ReadLine();
