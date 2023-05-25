@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TwinCAT;
 using TwinCAT.Ads;
 using TwinCAT.Ads.TypeSystem;
@@ -29,7 +25,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             session = new AdsSession(address,settings);
                 
             connection = (AdsConnection)session.Connect(); // Establish the connection 
-
+            
             adsConnection = connection;
         }
         public void ConnectionUsingAdsClient(string netid, int port)

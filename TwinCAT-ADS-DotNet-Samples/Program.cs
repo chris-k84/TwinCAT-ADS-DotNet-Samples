@@ -17,6 +17,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             using(Connection_Samples adsconnection = new Connection_Samples())
             {
                 ///////////////////Simple Connection sample, checks the status of connection//////////////
+                //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
                 //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 353);
                 // adsconnection.ConnectionUsingAdsSession("169.254.127.143.2.1", 1001);
                 // adsconnection.CheckConnection();
@@ -89,9 +90,10 @@ namespace TwinCAT_ADS_DotNet_Samples
 
 
                 //////////////////////////Event reading - set up Event handler on symbol/////////////////////////////
-                //reader.CreateEventOnPrimativeType(  adsconnection.loader, "MAIN.iCounter", OnChange);
-                // Console.ReadLine();
-                // reader.RemoveEventOnPrimative(adsconnection.loader,"MAIN.iInt");
+                //adsconnection.LoadSymbolsFromTarget(1);
+                //reader.CreateEventOnPrimativeType(adsconnection.loader, "MAIN.realData", OnChangeArray);
+                //Console.ReadLine();
+                //reader.RemoveEventOnPrimative(adsconnection.loader, "MAIN.realData");
                 //Console.ReadLine();
 
 
@@ -103,13 +105,24 @@ namespace TwinCAT_ADS_DotNet_Samples
             }
         }
 
-        static public void OnChange(object sender, ValueChangedEventArgs e)
+        static public void OnChangePrimative(object sender, ValueChangedEventArgs e)
         {
             Symbol symbol = (Symbol)e.Symbol;
             Console.WriteLine("The Var " + e.Symbol + " has value " + e.Value);
             Console.WriteLine(sender.ToString());
         }
-        
-        
+
+        static public void OnChangeArray(object sender, ValueChangedEventArgs e)
+        {
+            Symbol symbol = (Symbol)e.Symbol;
+            float[] values = (float[])e.Value;
+            foreach(float value in values)
+            {
+                Console.WriteLine(value.ToString());
+            }
+            Console.WriteLine(sender.ToString());
+        }
+
+
     }
 }
