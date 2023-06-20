@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TwinCAT.Ads.TypeSystem;
 using TwinCAT.TypeSystem;
 
@@ -103,6 +104,37 @@ namespace TwinCAT_ADS_DotNet_Samples
                 // byte[] readBuffer = new byte[8];
                 // reader.ReadWithIdxOfs("F302","10180001", adsconnection.adsConnection,readBuffer);
                 //Console.ReadLine();
+
+                //////////////////////////Timing ADS read cycles/////////////////////////////
+                //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
+                //adsconnection.LoadSymbolsFromTarget(0);
+                
+                //foreach (IAdsSymbol symbol in adsconnection.loader.Symbols)
+                //{
+                //    Console.WriteLine(symbol.InstancePath.ToString());
+                //    Console.WriteLine(symbol.IndexGroup.ToString());
+                //    Console.WriteLine(symbol.IndexOffset.ToString());
+                //}
+                //byte[] buffer = new byte[8000];
+                //Stopwatch stopwatch = Stopwatch.StartNew();
+
+                
+                ////double[] val1 = reader.ReadArrayWithSymbolicAccess(adsconnection.loader, "MAIN.arrLreal");
+                //reader.ReadWithIdxOfs("4040", "5DFF0", adsconnection.adsConnection, buffer);
+                ////reader.ReadWithIdxOfs("4040", "6EE88", adsconnection.adsConnection, buffer);
+
+                //stopwatch.Stop();
+
+
+                ////double[] buffer2 = new double[buffer.Length / 8];
+                ////Buffer.BlockCopy(buffer, 0, buffer2, 0, buffer2.Length * 8);
+                //double[] buffer2 = new double[buffer.Length / 8];
+                //for (int i = 0; i < buffer2.Length; i++)
+                //    buffer2[i] = BitConverter.ToDouble(buffer, i * 8);
+
+                //Console.WriteLine(stopwatch.ElapsedMilliseconds);
+
+                Console.ReadLine();
             }
         }
 
