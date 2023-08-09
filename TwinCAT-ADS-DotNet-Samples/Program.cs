@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Json;
+using System.Text;
 using TwinCAT.Ads.TypeSystem;
 using TwinCAT.TypeSystem;
+using System.Xml.Linq;
 
 namespace TwinCAT_ADS_DotNet_Samples
 {
@@ -38,12 +41,40 @@ namespace TwinCAT_ADS_DotNet_Samples
                 //string[] outputs = {"Task 4.Outputs.Var 347",
                 //                        "Task 4.Outputs.Var 348" };
                 //object[] values = { false, false };
-                //Object[] result =  reader.SumReadPrimativeTypes(adsconnection.loader, adsconnection.adsConnection, targets);
-                //Console.WriteLine(result[0] + " " + result[1]+ " " + result[2] + " "+ result[3]);
+                //Object[] result = reader.SumReadPrimativeTypes(adsconnection.loader, adsconnection.adsConnection, targets);
+                //Console.WriteLine(result[0] + " " + result[1] + " " + result[2] + " " + result[3]);
                 //Console.ReadLine();
                 //writer.SumWritePrimativeTypes(adsconnection.loader, adsconnection.adsConnection, outputs, values);
                 //Console.ReadLine();
 
+                /////////////////Read/Write SUM Data with Marshalling class///////////////////
+                //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
+                //adsconnection.LoadSymbolsFromTarget(1);
+                //string[] targets = { "MAIN.adsBool",
+                //                        "MAIN.adsInt",
+                //                        "MAIN.adsWord",
+                //                        "MAIN.adsLreal"};
+                
+                
+                //object[] result = reader.SumReadPrimativeTypes(adsconnection.loader, adsconnection.adsConnection, targets);
+                //Console.WriteLine(result[0].GetType().Name);
+                //Console.WriteLine(result[1].GetType().Name);
+                //Console.WriteLine(result[2].GetType().Name);
+                //Console.WriteLine(result[3].GetType().Name);
+
+                //Console.WriteLine(result[0] + " " + result[1] + " " + result[2]);
+
+                //ParseAdsData data = new ParseAdsData();
+
+                //data.ParseData(result);
+
+                //Console.WriteLine(data.ToString());
+
+                //Console.WriteLine(data.Data.ToString());
+
+                //Console.ReadLine();
+
+               
 
                 ///////////////////////Read direct IO data from EtherCAT Master ADS device////////////////////////
                 //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 27908);
@@ -97,6 +128,12 @@ namespace TwinCAT_ADS_DotNet_Samples
                 //Console.ReadLine();
                 //reader.RemoveEventOnPrimative(adsconnection.loader, "MAIN.realData");
                 //Console.ReadLine();
+                //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
+                //adsconnection.LoadSymbolsFromTarget(0);
+                //reader.CreateEventOnPrimativeType(adsconnection.loader, "MAIN.arrLreal", OnChangeArray);
+                //Console.ReadLine();
+                //reader.RemoveEventOnPrimative(adsconnection.loader, "MAIN.arrLreal");
+                //Console.ReadLine();
 
 
                 ////////////////////////////Read CoE index of EtherCAT device//////////////////////////////////////
@@ -108,7 +145,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 //////////////////////////Timing ADS read cycles/////////////////////////////
                 //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
                 //adsconnection.LoadSymbolsFromTarget(0);
-                
+
                 //foreach (IAdsSymbol symbol in adsconnection.loader.Symbols)
                 //{
                 //    Console.WriteLine(symbol.InstancePath.ToString());
@@ -118,8 +155,8 @@ namespace TwinCAT_ADS_DotNet_Samples
                 //byte[] buffer = new byte[8000];
                 //Stopwatch stopwatch = Stopwatch.StartNew();
 
-                
-                ////double[] val1 = reader.ReadArrayWithSymbolicAccess(adsconnection.loader, "MAIN.arrLreal");
+
+                //double[] val1 = reader.ReadArrayWithSymbolicAccess(adsconnection.loader, "MAIN.arrLreal");
                 //reader.ReadWithIdxOfs("4040", "5DFF0", adsconnection.adsConnection, buffer);
                 ////reader.ReadWithIdxOfs("4040", "6EE88", adsconnection.adsConnection, buffer);
 
@@ -148,8 +185,8 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void OnChangeArray(object sender, ValueChangedEventArgs e)
         {
             Symbol symbol = (Symbol)e.Symbol;
-            float[] values = (float[])e.Value;
-            foreach(float value in values)
+            double[] values = (double[])e.Value;
+            foreach(double value in values)
             {
                 Console.WriteLine(value.ToString());
             }
@@ -157,5 +194,44 @@ namespace TwinCAT_ADS_DotNet_Samples
         }
 
 
+    }
+
+    public struct MyData
+    {
+        public Boolean myBool;
+        public Int16 myInt;
+        public UInt32 myDword;
+        public Double myLreal;
+
+        public override string ToString() => $"({myBool}, {myInt}, {myDword}, {myLreal})";
+    }
+    class ParseAdsData
+    {
+        private Boolean myBool;
+        private Int16 myInt;
+        private UInt32 myDword;
+        private Double myLreal;
+        public MyData Data;
+        public ParseAdsData()
+        {
+            
+        }
+
+        public void ParseData(Object[] data)
+        {
+            myBool = (Boolean)data[0];
+            myInt = (Int16)data[1];
+            myDword = (UInt32)data[2];
+            myLreal = (Double)data[3];
+            Data.myBool = (Boolean)data[0];
+            Data.myInt = (Int16)data[1];
+            Data.myDword = (UInt32)data[2];
+            Data.myLreal = (Double)data[3];
+        }
+
+        public override string ToString()
+        {
+            return "Data: " + myBool + " " + myInt + " " + myDword + " " + myLreal;
+        }
     }
 }
