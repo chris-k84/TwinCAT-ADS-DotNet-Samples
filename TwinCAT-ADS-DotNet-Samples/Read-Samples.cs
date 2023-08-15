@@ -66,11 +66,17 @@ namespace TwinCAT_ADS_DotNet_Samples
             Symbol adsSymbol = (Symbol)loader.Symbols[symbol];
             adsSymbol.ValueChanged -= On_SymbolChange;
         }
-        public double[] ReadArrayWithSymbolicAccess(ISymbolLoader loader, string symbol)
+        public double[] ReadArrayLrealsWithSymbolicAccess(ISymbolLoader loader, string symbol)
         {
                 Symbol arrayRead = (Symbol)loader.Symbols[symbol];
 
                 return (double[])arrayRead.ReadValue();
+        }
+        public byte[] ReadStructArray(ISymbolLoader loader, string symbol)
+        {
+            Symbol arrayRead = (Symbol)loader.Symbols[symbol];
+
+            return (byte[])arrayRead.ReadValue();
         }
         public object[] SumReadPrimativeTypes(ISymbolLoader loader, IAdsConnection adsConnection, string[] symbols)
         {
