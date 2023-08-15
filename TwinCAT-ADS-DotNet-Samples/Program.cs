@@ -6,6 +6,8 @@ using System.Text;
 using TwinCAT.Ads.TypeSystem;
 using TwinCAT.TypeSystem;
 using System.Xml.Linq;
+using System.Net.Sockets;
+using TwinCAT.Ads;
 
 namespace TwinCAT_ADS_DotNet_Samples
 {
@@ -54,8 +56,8 @@ namespace TwinCAT_ADS_DotNet_Samples
                 //                        "MAIN.adsInt",
                 //                        "MAIN.adsWord",
                 //                        "MAIN.adsLreal"};
-                
-                
+
+
                 //object[] result = reader.SumReadPrimativeTypes(adsconnection.loader, adsconnection.adsConnection, targets);
                 //Console.WriteLine(result[0].GetType().Name);
                 //Console.WriteLine(result[1].GetType().Name);
@@ -74,7 +76,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 //Console.ReadLine();
 
-               
+
 
                 ///////////////////////Read direct IO data from EtherCAT Master ADS device////////////////////////
                 //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 27908);
@@ -171,7 +173,26 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 //Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
+
+                //////////////////////////Set Run Mode sample/////////////////////////////
+                adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 10000);
+                adsconnection.CheckConnection();
+                Console.WriteLine(adsconnection.info.AdsState.ToString());
+                Console.WriteLine(adsconnection.info.DeviceState.ToString());
+                Console.WriteLine(adsconnection.connectionState);
+
                 Console.ReadLine();
+
+                switch ("restart")
+                {
+                    case "restart": adsconnection.RestartTwinCAT(); ; break;
+                    case "run": adsconnection.StartPLC(); break;
+                    case "stop": adsconnection.StopPLC(); break;
+                    default: Console.WriteLine("Please choose \"Run\" or \"Stop\" and confirm with enter.."); break;
+                }
+                
+                Console.ReadLine();
+
             }
         }
 
