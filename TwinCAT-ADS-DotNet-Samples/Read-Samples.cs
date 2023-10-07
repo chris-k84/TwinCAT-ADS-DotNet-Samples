@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,13 @@ namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Read_Samples : IDisposable
     {
+        public void PrintAllSymbols(ISymbolLoader symbolLoader)
+        {
+            foreach (Symbol s in symbolLoader.Symbols)
+            {
+                Console.WriteLine(s.ToString());
+            }
+        }
         public void ReadWithIdxOfs(string Index, String Offset, IAdsConnection connection,byte[] ReadBuffer)
         {
                 uint Idx = Convert.ToUInt32(Index,16);

@@ -25,7 +25,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 ///////////////////Simple Connection sample, checks the status of connection//////////////
                 //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
                 //adsconnection.LoadSymbolsFromTarget(1);
-                //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 353);
+                //adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 351);
                 // adsconnection.ConnectionUsingAdsSession("169.254.127.143.2.1", 1001);
                 // adsconnection.CheckConnection();
                 // Console.WriteLine(adsconnection.info.ToString());
