@@ -9,7 +9,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Connection_Samples : IDisposable
     {
-        AdsSession session { get; set; }
+        public AdsSession session { get; set; }
         AdsClient client { get; set; }
         AdsConnection connection { get; set; }
         public IAdsConnection adsConnection { get; set; }
@@ -24,6 +24,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             address = new AmsAddress(netid, port);
 
             session = new AdsSession(address, settings);
+            //session = new AdsSession(AmsNetId.Local, 851);
 
             connection = (AdsConnection)session.Connect(); // Establish the connection 
             StateInfo info = connection.ReadState();

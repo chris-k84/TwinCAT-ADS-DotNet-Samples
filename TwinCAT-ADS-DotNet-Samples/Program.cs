@@ -8,13 +8,15 @@ using TwinCAT.TypeSystem;
 using System.Xml.Linq;
 using System.Net.Sockets;
 using TwinCAT.Ads;
+using TwinCAT;
+using System.Linq;
 
 namespace TwinCAT_ADS_DotNet_Samples
 {
     internal class Program
     {
         static void Main(string[] args)
-        {  
+        {
             // ADSReadwithSymbolicAccessDemo();
             // ADSTwinCATStateDemo();
             // ADSIndexVSSymbolReadSpeedDemo();
@@ -25,7 +27,8 @@ namespace TwinCAT_ADS_DotNet_Samples
             // ADSReadPDOIOTerminalDemo();
             // ADSSumReadWriteDemo();
             // ADSSumReadWriteMarshallingDemo();
-            ADSConnectionDiagnosticDemo();
+            //ADSConnectionDiagnosticDemo();
+            ADSREadRPCMethodsFound();
         }
 
         static public void OnChangePrimative(object sender, ValueChangedEventArgs e)
@@ -38,7 +41,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         {
             Symbol symbol = (Symbol)e.Symbol;
             double[] values = (double[])e.Value;
-            foreach(double value in values)
+            foreach (double value in values)
             {
                 Console.WriteLine(value.ToString());
             }
@@ -47,7 +50,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSConnectionDiagnosticDemo()
         {
             ///////////////////Simple Connection sample, checks the status of connection//////////////
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
                 adsconnection.CheckConnection();
@@ -60,8 +63,8 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSSumReadWriteDemo()
         {
             Read_Samples reader = new Read_Samples();
-            Write_Samples writer = new Write_Samples(); 
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            Write_Samples writer = new Write_Samples();
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 /////////////////Read/Write SUM Data From an IO Task///////////////////
                 adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 301);
@@ -83,7 +86,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSSumReadWriteMarshallingDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 /////////////////Read/Write SUM Data with Marshalling class///////////////////
                 adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
@@ -116,7 +119,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSReadPDOIOTerminalDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 ///////////////////////Read direct IO data from EtherCAT Master ADS device////////////////////////
                 adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 27908);
@@ -135,40 +138,40 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSClassMethodCallDemo()
         {
             Method_Call_Samples methods = new Method_Call_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 ////////////////////////Call Method inside PLC///////////////////////////////////////////////////
-                methods.DisplayRpcMethods(adsconnection.loader,"MAIN.fbMath");
-                methods.CallMethodInPLC(adsconnection.adsConnection, 
-                     "MAIN.fbMath","mAdd",new object[] { (short)1, (short)2 });
-                Console.ReadLine();   
+                methods.DisplayRpcMethods(adsconnection.loader, "MAIN.fbMath");
+                methods.CallMethodInPLC(adsconnection.adsConnection,
+                     "MAIN.fbMath", "mAdd", new object[] { (short)1, (short)2 });
+                Console.ReadLine();
             }
         }
         static public void ADSTcCOMArrayReadDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 //////////////////Read array data from TcCOM object in TwinCAT/////////////////////////////
                 Console.WriteLine("Array Access");
                 double[] buffer = new double[8];
-                buffer = reader.ReadArrayLrealsWithSymbolicAccess(adsconnection.loader, 
-                   "Object1 (MyTestModel).MyTestModel_B.Constant5" );
+                buffer = reader.ReadArrayLrealsWithSymbolicAccess(adsconnection.loader,
+                   "Object1 (MyTestModel).MyTestModel_B.Constant5");
                 foreach (double d in buffer)
                 {
-                   Console.WriteLine(d.ToString());
+                    Console.WriteLine(d.ToString());
                 }
                 Console.ReadLine();
                 Console.WriteLine("Single Access");
                 Console.WriteLine(reader.ReadPrimativeWithSymbolicAccess(adsconnection.loader,
                                   "Object1 (MyTestModel).MyTestModel_B.Constant5[2]"));
-                Console.ReadLine();  
+                Console.ReadLine();
             }
         }
         static public void ADSEventDrivenReadDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 //////////////////////////Event reading - set up Event handler on symbol/////////////////////////////
                 adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
@@ -182,19 +185,19 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSEtherCATCoEReadDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 ////////////////////////////Read CoE index of EtherCAT device//////////////////////////////////////
                 adsconnection.ConnectionUsingAdsSession("169.254.127.143.2.1", 1001);
                 byte[] readBuffer = new byte[8];
-                reader.ReadWithIdxOfs("F302","10180001", adsconnection.adsConnection,readBuffer);
+                reader.ReadWithIdxOfs("F302", "10180001", adsconnection.adsConnection, readBuffer);
                 Console.ReadLine();
             }
         }
         static public void ADSIndexVSSymbolReadSpeedDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 //////////////////////////Timing ADS read cycles/////////////////////////////
                 adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
@@ -202,9 +205,9 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 foreach (IAdsSymbol symbol in adsconnection.loader.Symbols)
                 {
-                   Console.WriteLine(symbol.InstancePath.ToString());
-                   Console.WriteLine(symbol.IndexGroup.ToString());
-                   Console.WriteLine(symbol.IndexOffset.ToString());
+                    Console.WriteLine(symbol.InstancePath.ToString());
+                    Console.WriteLine(symbol.IndexGroup.ToString());
+                    Console.WriteLine(symbol.IndexOffset.ToString());
                 }
                 byte[] buffer = new byte[8000];
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -212,7 +215,7 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 //double[] val1 = reader.ReadArrayLrealsWithSymbolicAccess(adsconnection.loader, "MAIN.arrLreal");
                 reader.ReadWithIdxOfs("4040", "5DFF0", adsconnection.adsConnection, buffer);
-                
+
 
                 stopwatch.Stop();
 
@@ -221,7 +224,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 //Buffer.BlockCopy(buffer, 0, buffer2, 0, buffer2.Length * 8);
                 double[] buffer2 = new double[buffer.Length / 8];
                 for (int i = 0; i < buffer2.Length; i++)
-                   buffer2[i] = BitConverter.ToDouble(buffer, i * 8);
+                    buffer2[i] = BitConverter.ToDouble(buffer, i * 8);
 
                 Console.WriteLine(stopwatch.ElapsedMilliseconds);
             }
@@ -229,7 +232,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSTwinCATStateDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 //////////////////////////Set Run Mode sample/////////////////////////////
                 adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 10000);
@@ -242,17 +245,17 @@ namespace TwinCAT_ADS_DotNet_Samples
 
                 switch ("restart")
                 {
-                   case "restart": adsconnection.RestartTwinCAT(); ; break;
-                   case "run": adsconnection.StartPLC(); break;
-                   case "stop": adsconnection.StopPLC(); break;
-                   default: Console.WriteLine("Please choose \"Run\" or \"Stop\" and confirm with enter.."); break;
+                    case "restart": adsconnection.RestartTwinCAT(); ; break;
+                    case "run": adsconnection.StartPLC(); break;
+                    case "stop": adsconnection.StopPLC(); break;
+                    default: Console.WriteLine("Please choose \"Run\" or \"Stop\" and confirm with enter.."); break;
                 }
             }
         }
         static public void ADSReadwithSymbolicAccessDemo()
         {
             Read_Samples reader = new Read_Samples();
-            using(Connection_Samples adsconnection = new Connection_Samples())
+            using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 ////////////////////////Read samples for primitive and structs/////////////////////////////////////
                 Console.WriteLine(reader.ReadPrimativeWithSymbolicAccess(adsconnection.loader, "MAIN.iInt"));
@@ -261,44 +264,79 @@ namespace TwinCAT_ADS_DotNet_Samples
                 Console.ReadLine();
             }
         }
-    }
-
-    public struct MyData
-    {
-        public Boolean myBool;
-        public Int16 myInt;
-        public UInt32 myDword;
-        public Double myLreal;
-
-        public override string ToString() => $"({myBool}, {myInt}, {myDword}, {myLreal})";
-    }
-    class ParseAdsData
-    {
-        private Boolean myBool;
-        private Int16 myInt;
-        private UInt32 myDword;
-        private Double myLreal;
-        public MyData Data;
-        public ParseAdsData()
+        static public void ADSREadRPCMethodsFound()
         {
-            
+            using (Connection_Samples adsconnection = new Connection_Samples())
+            {
+                adsconnection.ConnectionUsingAdsSession("127.0.0.1.1.1", 851);
+                adsconnection.LoadSymbolsFromTarget(2);
+                List<string> Tests = new List<string>();
+                foreach (ISymbol symbol in adsconnection.loader.Symbols)
+                {
+                    RecursiveInterfaceSearch(symbol, Tests);
+                }
+                foreach(string s in  Tests)
+                {
+                    Console.WriteLine(s);
+                }
+            }
         }
-
-        public void ParseData(Object[] data)
+        static public void RecursiveInterfaceSearch(ISymbol symbol, List<string> Tests)
         {
-            myBool = (Boolean)data[0];
-            myInt = (Int16)data[1];
-            myDword = (UInt32)data[2];
-            myLreal = (Double)data[3];
-            Data.myBool = (Boolean)data[0];
-            Data.myInt = (Int16)data[1];
-            Data.myDword = (UInt32)data[2];
-            Data.myLreal = (Double)data[3];
+            if (symbol.SubSymbols.Count == 0)
+            {
+                return;
+            }
+            foreach (ISymbol symbol1 in symbol.SubSymbols)
+            {
+                if (symbol1.Category == DataTypeCategory.Struct)
+                {
+                    if ((symbol1.DataType as StructType).InterfaceImplementationNames.Contains("Some Interface"))
+                    {
+
+                        Tests.Add(symbol1.InstancePath);
+                    }
+                }
+                RecursiveInterfaceSearch(symbol1, Tests);
+            }
         }
-
-        public override string ToString()
+        public struct MyData
         {
-            return "Data: " + myBool + " " + myInt + " " + myDword + " " + myLreal;
+            public Boolean myBool;
+            public Int16 myInt;
+            public UInt32 myDword;
+            public Double myLreal;
+
+            public override string ToString() => $"({myBool}, {myInt}, {myDword}, {myLreal})";
+        }
+        class ParseAdsData
+        {
+            private Boolean myBool;
+            private Int16 myInt;
+            private UInt32 myDword;
+            private Double myLreal;
+            public MyData Data;
+            public ParseAdsData()
+            {
+
+            }
+
+            public void ParseData(Object[] data)
+            {
+                myBool = (Boolean)data[0];
+                myInt = (Int16)data[1];
+                myDword = (UInt32)data[2];
+                myLreal = (Double)data[3];
+                Data.myBool = (Boolean)data[0];
+                Data.myInt = (Int16)data[1];
+                Data.myDword = (UInt32)data[2];
+                Data.myLreal = (Double)data[3];
+            }
+
+            public override string ToString()
+            {
+                return "Data: " + myBool + " " + myInt + " " + myDword + " " + myLreal;
+            }
         }
     }
 }
