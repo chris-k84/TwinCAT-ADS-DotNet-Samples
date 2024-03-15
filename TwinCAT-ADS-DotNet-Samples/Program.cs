@@ -24,11 +24,10 @@ namespace TwinCAT_ADS_DotNet_Samples
             // ADSEventDrivenReadDemo();
             // ADSTcCOMArrayReadDemo();
             // ADSClassMethodCallDemo();
-            // ADSReadPDOIOTerminalDemo();
+            ADSReadPDOIOTerminalDemo();
             // ADSSumReadWriteDemo();
             // ADSSumReadWriteMarshallingDemo();
             //ADSConnectionDiagnosticDemo();
-            ADSREadRPCMethodsFound();
         }
 
         static public void OnChangePrimative(object sender, ValueChangedEventArgs e)
@@ -122,12 +121,14 @@ namespace TwinCAT_ADS_DotNet_Samples
             using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 ///////////////////////Read direct IO data from EtherCAT Master ADS device////////////////////////
-                adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 27908);
-                adsconnection.LoadSymbolsFromTarget(1);
+                adsconnection.ConnectionUsingAdsClient("10.112.0.23.1.1", 27907);
+                
+                adsconnection.LoadSymbolsFromTarget(0);
                 string[] targets = { "Term 3 (EL9227-5500).OCP Inputs Channel 1.Load",
                                        "Term 4 (EL1008).Channel 1.Input",
                                        "Term 3 (EL9227-5500).OCP Inputs Channel 2.Current",
-                                       "Term 10 (ELX1054).Channel 1.Input"};
+                                        "Term 10 (ELX1054).Channel 1.Input"};
+                reader.PrintAllSymbols(adsconnection.loader);
                 Console.WriteLine(reader.ReadPrimativeWithSymbolicAccess(adsconnection.loader, targets[0]));
                 Console.WriteLine(reader.ReadPrimativeWithSymbolicAccess(adsconnection.loader, targets[1]));
                 Console.WriteLine(reader.ReadPrimativeWithSymbolicAccess(adsconnection.loader, targets[2]));
@@ -264,42 +265,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 Console.ReadLine();
             }
         }
-        static public void ADSREadRPCMethodsFound()
-        {
-            using (Connection_Samples adsconnection = new Connection_Samples())
-            {
-                adsconnection.ConnectionUsingAdsSession("127.0.0.1.1.1", 851);
-                adsconnection.LoadSymbolsFromTarget(2);
-                List<string> Tests = new List<string>();
-                foreach (ISymbol symbol in adsconnection.loader.Symbols)
-                {
-                    RecursiveInterfaceSearch(symbol, Tests);
-                }
-                foreach(string s in  Tests)
-                {
-                    Console.WriteLine(s);
-                }
-            }
-        }
-        static public void RecursiveInterfaceSearch(ISymbol symbol, List<string> Tests)
-        {
-            if (symbol.SubSymbols.Count == 0)
-            {
-                return;
-            }
-            foreach (ISymbol symbol1 in symbol.SubSymbols)
-            {
-                if (symbol1.Category == DataTypeCategory.Struct)
-                {
-                    if ((symbol1.DataType as StructType).InterfaceImplementationNames.Contains("Some Interface"))
-                    {
-
-                        Tests.Add(symbol1.InstancePath);
-                    }
-                }
-                RecursiveInterfaceSearch(symbol1, Tests);
-            }
-        }
+       
         public struct MyData
         {
             public Boolean myBool;
@@ -338,5 +304,7 @@ namespace TwinCAT_ADS_DotNet_Samples
                 return "Data: " + myBool + " " + myInt + " " + myDword + " " + myLreal;
             }
         }
+
+        
     }
 }

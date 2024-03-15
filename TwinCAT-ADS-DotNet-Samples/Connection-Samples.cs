@@ -12,6 +12,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         public AdsSession session { get; set; }
         AdsClient client { get; set; }
         AdsConnection connection { get; set; }
+        IConnection _connection;
         public IAdsConnection adsConnection { get; set; }
         public ConnectionState connectionState { get; set; }
         SessionSettings settings = SessionSettings.Default;
@@ -29,7 +30,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             connection = (AdsConnection)session.Connect(); // Establish the connection 
             StateInfo info = connection.ReadState();
 
-
+            _connection = connection;
             adsConnection = connection;
         }
         public void ConnectionUsingAdsClient(string netid, int port)
@@ -39,11 +40,15 @@ namespace TwinCAT_ADS_DotNet_Samples
 
             client.Connect(address);
 
-            adsConnection = connection;
+            _connection = client;
         }
-        public void ConnectToIOServer(AmsAddress address)
+        public void ConnectToIOServer(string netid, int port)
         {
-            connection = (AdsConnection)session.Connect();
+            address = new AmsAddress(netid, port);
+
+            session = new AdsSession(address, settings);
+
+            _connection = (AdsConnection)session.Connect();
         }
         public void CheckConnection()
         {
@@ -58,7 +63,7 @@ namespace TwinCAT_ADS_DotNet_Samples
         {
             SymbolsLoadMode loadMode = (SymbolsLoadMode)SymbolMode;
             SymbolLoaderSettings loaderSettings = new SymbolLoaderSettings(loadMode);
-            loader = SymbolLoaderFactory.Create(connection, loaderSettings);
+            loader = SymbolLoaderFactory.Create(_connection, loaderSettings);
         }
         ///<summary>
         ///Connect to plc port 851
