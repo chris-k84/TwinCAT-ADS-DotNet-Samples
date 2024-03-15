@@ -265,7 +265,56 @@ namespace TwinCAT_ADS_DotNet_Samples
                 Console.ReadLine();
             }
         }
-       
+        static public void ADSREadRPCMethodsFound()
+        {
+            using (Connection_Samples adsconnection = new Connection_Samples())
+            {
+                adsconnection.ConnectionUsingAdsSession("127.0.0.1.1.1", 851);
+                adsconnection.LoadSymbolsFromTarget(2);
+                List<TestCase> testCases = new List<TestCase>();
+                foreach (ISymbol symbol in adsconnection.loader.Symbols)
+                {
+                    RecursiveInterfaceSearch(symbol, testCases);
+                }
+                foreach (TestCase s in testCases)
+                {
+                    Console.WriteLine(s);
+                }
+            }
+        }
+        static public void RecursiveInterfaceSearch(ISymbol symbol, List<TestCase> Tests)
+        {
+            if (symbol.SubSymbols.Count == 0)
+            {
+                return;
+            }
+            foreach (ISymbol symbol1 in symbol.SubSymbols)
+            {
+                if (symbol1.Category == DataTypeCategory.Struct)
+                {
+                    if ((symbol1.DataType as StructType).InterfaceImplementationNames.Contains("I_SomeInterface"))
+                    {
+                        TestCase test = new TestCase();
+                        //Tests.Add(symbol1.Attributes[0].Name, symbol1.InstancePath);
+                        //Tests.Add(symbol1.Attributes[0].Name);
+                        test.Name = symbol1.Attributes[0].Name;
+                        test.Path = symbol1.InstancePath;
+                        Tests.Add(test);
+                    }
+                }
+                RecursiveInterfaceSearch(symbol1, Tests);
+            }
+        }
+        public class TestCase
+        {
+            public string Name { get; set; } = "";
+            public string Path { get; set; } = "";
+
+            public override string ToString()
+            {
+                return Name;
+            }
+        }
         public struct MyData
         {
             public Boolean myBool;
