@@ -24,10 +24,10 @@ namespace TwinCAT_ADS_DotNet_Samples
             // ADSEventDrivenReadDemo();
             // ADSTcCOMArrayReadDemo();
             // ADSClassMethodCallDemo();
-            ADSReadPDOIOTerminalDemo();
+            // ADSReadPDOIOTerminalDemo();
             // ADSSumReadWriteDemo();
             // ADSSumReadWriteMarshallingDemo();
-            //ADSConnectionDiagnosticDemo();
+            // ADSConnectionDiagnosticDemo();
         }
 
         static public void OnChangePrimative(object sender, ValueChangedEventArgs e)
@@ -121,7 +121,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 ///////////////////////Read direct IO data from EtherCAT Master ADS device////////////////////////
-                adsconnection.ConnectionUsingAdsClient("10.112.0.23.1.1", 27907);
+                adsconnection.ConnectionUsingAdsSession("10.112.0.23.1.1", 27907);
                 
                 adsconnection.LoadSymbolsFromTarget(0);
                 string[] targets = { "Term 3 (EL9227-5500).OCP Inputs Channel 1.Load",
@@ -353,7 +353,5 @@ namespace TwinCAT_ADS_DotNet_Samples
                 return "Data: " + myBool + " " + myInt + " " + myDword + " " + myLreal;
             }
         }
-
-        
     }
 }
