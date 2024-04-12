@@ -24,10 +24,11 @@ namespace TwinCAT_ADS_DotNet_Samples
             // ADSEventDrivenReadDemo();
             // ADSTcCOMArrayReadDemo();
             // ADSClassMethodCallDemo();
-            ADSReadPDOIOTerminalDemo();
+            // ADSReadPDOIOTerminalDemo();
             // ADSSumReadWriteDemo();
             // ADSSumReadWriteMarshallingDemo();
-            //ADSConnectionDiagnosticDemo();
+            // ADSConnectionDiagnosticDemo();
+            ADSREadRPCMethodsFound();
         }
 
         static public void OnChangePrimative(object sender, ValueChangedEventArgs e)
@@ -272,17 +273,26 @@ namespace TwinCAT_ADS_DotNet_Samples
                 adsconnection.ConnectionUsingAdsSession("127.0.0.1.1.1", 851);
                 adsconnection.LoadSymbolsFromTarget(2);
                 List<TestCase> testCases = new List<TestCase>();
+                List<ISymbol> TestSuites = new List<ISymbol>();
                 foreach (ISymbol symbol in adsconnection.loader.Symbols)
                 {
-                    RecursiveInterfaceSearch(symbol, testCases);
+                    RecursiveInterfaceSearch(symbol, TestSuites);
                 }
-                foreach (TestCase s in testCases)
+                
+                foreach (ISymbol s in TestSuites)
                 {
-                    Console.WriteLine(s);
+
+                    IStructInstance rpcStructInstance = s as IStructInstance;
+                    foreach (var rpc in rpcStructInstance.RpcMethods)
+                    {
+                        Console.WriteLine(rpc.Name);
+                    }
+                   
+                    
                 }
             }
         }
-        static public void RecursiveInterfaceSearch(ISymbol symbol, List<TestCase> Tests)
+        static public void RecursiveInterfaceSearch(ISymbol symbol, List<ISymbol> TestSuites)
         {
             if (symbol.SubSymbols.Count == 0)
             {
@@ -294,21 +304,24 @@ namespace TwinCAT_ADS_DotNet_Samples
                 {
                     if ((symbol1.DataType as StructType).InterfaceImplementationNames.Contains("I_SomeInterface"))
                     {
-                        TestCase test = new TestCase();
-                        //Tests.Add(symbol1.Attributes[0].Name, symbol1.InstancePath);
-                        //Tests.Add(symbol1.Attributes[0].Name);
-                        test.Name = symbol1.Attributes[0].Name;
-                        test.Path = symbol1.InstancePath;
-                        Tests.Add(test);
+                        //foreach()
+                        TestSuites.Add(symbol1);
+                        //TestCase test = new TestCase();
+                        ////Tests.Add(symbol1.Attributes[0].Name, symbol1.InstancePath);
+                        ////Tests.Add(symbol1.Attributes[0].Name);
+                        //test.Name = symbol1.Attributes[0].Name;
+                        //test.Path = symbol1.InstancePath;
+                        //Tests.Add(test);
                     }
                 }
-                RecursiveInterfaceSearch(symbol1, Tests);
+                RecursiveInterfaceSearch(symbol1, TestSuites);
             }
         }
         public class TestCase
         {
             public string Name { get; set; } = "";
             public string Path { get; set; } = "";
+            public string[] Tests { get; set; }
 
             public override string ToString()
             {
