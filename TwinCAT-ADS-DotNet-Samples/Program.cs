@@ -17,6 +17,19 @@ namespace TwinCAT_ADS_DotNet_Samples
     {
         static void Main(string[] args)
         {
+            //Really simple example, add an iCounter to your MAIN and increment, run this little section to get the value
+            using(AdsClient adsClient = new AdsClient())
+            {
+                int intToRead = 0;
+
+                adsClient.Connect("10.97.0.23.1.1", 851);
+
+                intToRead = (int)adsClient.ReadValue("MAIN.iCounter", typeof(int));
+
+                Console.WriteLine(intToRead.ToString());
+            }
+            //Really simple sample
+
             // ADSReadwithSymbolicAccessDemo();
             // ADSTwinCATStateDemo();
             // ADSIndexVSSymbolReadSpeedDemo();
@@ -28,7 +41,7 @@ namespace TwinCAT_ADS_DotNet_Samples
             // ADSSumReadWriteDemo();
             // ADSSumReadWriteMarshallingDemo();
             // ADSConnectionDiagnosticDemo();
-            ADSREadRPCMethodsFound();
+            //ADSREadRPCMethodsFound();
         }
 
         static public void OnChangePrimative(object sender, ValueChangedEventArgs e)
