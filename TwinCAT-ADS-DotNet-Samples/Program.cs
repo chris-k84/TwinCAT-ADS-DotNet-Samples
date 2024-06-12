@@ -17,18 +17,32 @@ namespace TwinCAT_ADS_DotNet_Samples
     {
         static void Main(string[] args)
         {
-            //Really simple example, add an iCounter to your MAIN and increment, run this little section to get the value
-            using(AdsClient adsClient = new AdsClient())
+            //Really simple example with adsclient (outdated), add an iCounter to your MAIN and increment, run this little section to get the value
+            //using(AdsClient adsClient = new AdsClient())
+            //{
+            //    int intToRead = 0;
+
+            //    adsClient.Connect("10.97.0.23.1.1", 851);
+
+            //    intToRead = (int)adsClient.ReadValue("MAIN.iCounter", typeof(int));
+
+            //    Console.WriteLine(intToRead.ToString());
+            //}
+            //Really simple sample
+
+            //Reall simple sample with Adssession, that allows connection diagnostics through the adsession class,
+            //adsconneciton provides the same functionality as adsclient
+            SessionSettings settings = SessionSettings.Default;
+            AmsAddress address = new AmsAddress("10.97.0.23.1.1", 851);
+            AdsConnection adsConnection;
+            using (AdsSession adsSession = new AdsSession(address, settings))
             {
                 int intToRead = 0;
-
-                adsClient.Connect("10.97.0.23.1.1", 851);
-
-                intToRead = (int)adsClient.ReadValue("MAIN.iCounter", typeof(int));
-
+                adsConnection = (AdsConnection)adsSession.Connect();
+                intToRead = (int)adsConnection.ReadValue("MAIN.iCounter", typeof(int));
                 Console.WriteLine(intToRead.ToString());
             }
-            //Really simple sample
+            //really simple sample
 
             // ADSReadwithSymbolicAccessDemo();
             // ADSTwinCATStateDemo();
