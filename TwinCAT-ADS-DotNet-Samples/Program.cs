@@ -17,31 +17,38 @@ namespace TwinCAT_ADS_DotNet_Samples
     {
         static void Main(string[] args)
         {
+            GetAllSymbolAndShow();
             //Really simple example with adsclient (outdated), add an iCounter to your MAIN and increment, run this little section to get the value
             //using(AdsClient adsClient = new AdsClient())
             //{
-            //    int intToRead = 0;
+            //    //int intToRead = 0;
+            //    Boolean valueToRead;
+            //    int targetAxis = 2;
 
-            //    adsClient.Connect("10.97.0.23.1.1", 851);
+            //    //adsClient.Connect("10.97.0.23.1.1", 851);
+            //    adsClient.Connect("Local", 851);
 
-            //    intToRead = (int)adsClient.ReadValue("MAIN.iCounter", typeof(int));
+            //    string target = string.Format("MAIN.fbAxis{0}.bBusy", targetAxis.ToString());
+            //    //intToRead = (int)adsClient.ReadValue("MAIN.iCounter", typeof(int));
+            //    valueToRead = (Boolean)adsClient.ReadValue(target,typeof(Boolean));
 
-            //    Console.WriteLine(intToRead.ToString());
+            //    //Console.WriteLine(intToRead.ToString());
+            //    Console.WriteLine(valueToRead.ToString());
             //}
             //Really simple sample
 
             //Reall simple sample with Adssession, that allows connection diagnostics through the adsession class,
             //adsconneciton provides the same functionality as adsclient
-            SessionSettings settings = SessionSettings.Default;
-            AmsAddress address = new AmsAddress("10.97.0.23.1.1", 851);
-            AdsConnection adsConnection;
-            using (AdsSession adsSession = new AdsSession(address, settings))
-            {
-                int intToRead = 0;
-                adsConnection = (AdsConnection)adsSession.Connect();
-                intToRead = (int)adsConnection.ReadValue("MAIN.iCounter", typeof(int));
-                Console.WriteLine(intToRead.ToString());
-            }
+            //SessionSettings settings = SessionSettings.Default;
+            //AmsAddress address = new AmsAddress("10.97.0.23.1.1", 851);
+            //AdsConnection adsConnection;
+            //using (AdsSession adsSession = new AdsSession(address, settings))
+            //{
+            //    int intToRead = 0;
+            //    adsConnection = (AdsConnection)adsSession.Connect();
+            //    intToRead = (int)adsConnection.ReadValue("MAIN.iCounter", typeof(int));
+            //    Console.WriteLine(intToRead.ToString());
+            //}
             //really simple sample
 
             // ADSReadwithSymbolicAccessDemo();
@@ -58,6 +65,25 @@ namespace TwinCAT_ADS_DotNet_Samples
             //ADSREadRPCMethodsFound();
         }
 
+        static public void GetAllSymbolAndShow()
+        {
+            using (Connection_Samples adsconnection = new Connection_Samples())
+            {
+                adsconnection.ConnectionUsingAdsSession("127.0.0.1.1.1", 851);
+                adsconnection.LoadSymbolsFromTarget(1);
+                foreach (Symbol symbol in adsconnection.loader.Symbols)
+                {
+                    if (symbol.InstanceName == "MAIN")
+                    {
+                        foreach (Symbol symbol1 in symbol.SubSymbols)
+                        {
+                            Console.WriteLine(symbol1.InstanceName.ToString());
+                        }
+                    }
+                    
+                }
+            }
+        }
         static public void OnChangePrimative(object sender, ValueChangedEventArgs e)
         {
             Symbol symbol = (Symbol)e.Symbol;
