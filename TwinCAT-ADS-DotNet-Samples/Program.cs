@@ -17,7 +17,7 @@ namespace TwinCAT_ADS_DotNet_Samples
     {
         static void Main(string[] args)
         {
-            GetAllSymbolAndShow();
+
             //Really simple example with adsclient (outdated), add an iCounter to your MAIN and increment, run this little section to get the value
             //using(AdsClient adsClient = new AdsClient())
             //{
@@ -40,13 +40,13 @@ namespace TwinCAT_ADS_DotNet_Samples
             //Reall simple sample with Adssession, that allows connection diagnostics through the adsession class,
             //adsconneciton provides the same functionality as adsclient
             //SessionSettings settings = SessionSettings.Default;
-            //AmsAddress address = new AmsAddress("10.97.0.23.1.1", 851);
+            //AmsAddress address = new AmsAddress("192.168.56.1.1.1", 851);
             //AdsConnection adsConnection;
             //using (AdsSession adsSession = new AdsSession(address, settings))
             //{
             //    int intToRead = 0;
             //    adsConnection = (AdsConnection)adsSession.Connect();
-            //    intToRead = (int)adsConnection.ReadValue("MAIN.iCounter", typeof(int));
+            //    intToRead = (int)adsConnection.ReadValue("MAIN.sTest", typeof(int));
             //    Console.WriteLine(intToRead.ToString());
             //}
             //really simple sample
@@ -60,27 +60,43 @@ namespace TwinCAT_ADS_DotNet_Samples
             // ADSClassMethodCallDemo();
             // ADSReadPDOIOTerminalDemo();
             // ADSSumReadWriteDemo();
-            // ADSSumReadWriteMarshallingDemo();
+            //ADSSumReadWriteMarshallingDemo();
             // ADSConnectionDiagnosticDemo();
-            //ADSREadRPCMethodsFound();
+            // ADSREadRPCMethodsFound();
+            //GetAllSymbolAndShow();
         }
 
         static public void GetAllSymbolAndShow()
         {
             using (Connection_Samples adsconnection = new Connection_Samples())
             {
-                adsconnection.ConnectionUsingAdsSession("127.0.0.1.1.1", 851);
+                adsconnection.ConnectionUsingAdsSession("199.4.42.250.1.1", 351);
                 adsconnection.LoadSymbolsFromTarget(1);
                 foreach (Symbol symbol in adsconnection.loader.Symbols)
                 {
+                    ///Only need to go down 1 layer with PLC////
                     if (symbol.InstanceName == "MAIN")
                     {
                         foreach (Symbol symbol1 in symbol.SubSymbols)
                         {
                             Console.WriteLine(symbol1.InstanceName.ToString());
+
                         }
                     }
+                    ///Need to go down 1 extra layer with TMCs////
                     
+                    //foreach (Symbol symbol1 in symbol.SubSymbols)
+                    //{
+                    //    if (symbol1.InstanceName == "IntegerTest_P")
+                    //    {
+                    //        foreach (Symbol symbol2 in symbol1.SubSymbols)
+                    //        {
+                    //            Console.WriteLine(symbol1.InstanceName.ToString());
+                    //        }
+                    //    }
+                    //}
+
+
                 }
             }
         }
@@ -139,32 +155,51 @@ namespace TwinCAT_ADS_DotNet_Samples
         static public void ADSSumReadWriteMarshallingDemo()
         {
             Read_Samples reader = new Read_Samples();
+            Write_Samples writer = new Write_Samples();
             using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 /////////////////Read/Write SUM Data with Marshalling class///////////////////
-                adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
+                adsconnection.ConnectionUsingAdsSession("199.4.42.250.1.1", 351);
                 adsconnection.LoadSymbolsFromTarget(1);
-                string[] targets = { "MAIN.adsBool",
-                                       "MAIN.adsInt",
-                                       "MAIN.adsWord",
-                                       "MAIN.adsLreal"};
+
+                //////////////////SUM READ/////////////////////////////////
+                //string[] targets = { "MAIN.adsBool",
+                //                       "MAIN.adsInt",
+                //                       "MAIN.adsWord",
+                //                       "MAIN.adsLreal"};
 
 
-                object[] result = reader.SumReadPrimativeTypes(adsconnection.loader, adsconnection.adsConnection, targets);
-                Console.WriteLine(result[0].GetType().Name);
-                Console.WriteLine(result[1].GetType().Name);
-                Console.WriteLine(result[2].GetType().Name);
-                Console.WriteLine(result[3].GetType().Name);
+                //object[] result = reader.SumReadPrimativeTypes(adsconnection.loader, adsconnection.adsConnection, targets);
+                //Console.WriteLine(result[0].GetType().Name);
+                //Console.WriteLine(result[1].GetType().Name);
+                //Console.WriteLine(result[2].GetType().Name);
+                //Console.WriteLine(result[3].GetType().Name);
 
-                Console.WriteLine(result[0] + " " + result[1] + " " + result[2]);
+                //Console.WriteLine(result[0] + " " + result[1] + " " + result[2]);
 
-                ParseAdsData data = new ParseAdsData();
+                //ParseAdsData data = new ParseAdsData();
 
-                data.ParseData(result);
+                //data.ParseData(result);
 
-                Console.WriteLine(data.ToString());
+                //Console.WriteLine(data.ToString());
 
-                Console.WriteLine(data.Data.ToString());
+                //Console.WriteLine(data.Data.ToString());
+
+                //////////////////SUM WRITE/////////////////////////////////
+                byte[] var1 = new byte[4];
+                byte[] var2 = new byte[4];
+
+                var1[1] = 1;
+                var2[1] = 2;
+
+                object[] writevalues = new object[2];
+
+                writevalues[0] = var1;
+                writevalues[1] = var2;
+                
+                string[] targets = { "Object1 (IntegerTest).IntegerTest_P.testParamUint16_1", "Object1 (IntegerTest).IntegerTest_P.testParamUint16_2" };
+              //  string[] targets = { "MAIN.arrByte1", "MAIN.arrByte2" };
+                writer.SumWritePrimativeTypes(adsconnection.loader, adsconnection.adsConnection, targets, writevalues);
 
                 Console.ReadLine();
             }
@@ -229,11 +264,11 @@ namespace TwinCAT_ADS_DotNet_Samples
             using (Connection_Samples adsconnection = new Connection_Samples())
             {
                 //////////////////////////Event reading - set up Event handler on symbol/////////////////////////////
-                adsconnection.ConnectionUsingAdsSession("169.254.61.77.1.1", 851);
+                adsconnection.ConnectionUsingAdsSession("192.168.56.1.1.1", 851);
                 adsconnection.LoadSymbolsFromTarget(1);
-                reader.CreateEventOnPrimativeType(adsconnection.loader, "MAIN.realData", OnChangeArray);
+                reader.CreateEventOnPrimativeType(adsconnection.loader, "MAIN.sTest", OnChangePrimative);
                 Console.ReadLine();
-                reader.RemoveEventOnPrimative(adsconnection.loader, "MAIN.realData");
+                reader.RemoveEventOnPrimative(adsconnection.loader, "MAIN.sTest");
                 Console.ReadLine();
             }
         }
